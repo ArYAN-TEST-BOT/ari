@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArYAN MIDEA</title>
+    <link rel="stylesheet" href="download.css">
+</head>
+<style>
+	body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to right, #1e3c72, #2a5298);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  color: #fff;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 90%;
+  max-width: 500px;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  color: #333;
+}
+
+p {
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.75rem 2rem;
+  background: #2a5298;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: #1e3c72;
+}
+
+.hidden {
+  display: none;
+}
+
+#result {
+  margin-top: 2rem;
+}
+
+.video-player {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  margin: 1rem 0;
+  animation: fadeIn 1s;
+}
+
+.download-button {
+  padding: 0.75rem 2rem;
+  background: #2a5298;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 0.5rem;
+  transition: background 0.3s ease;
+  animation: fadeIn 1s;
+}
+
+.download-button:hover {
+  background: #1e3c72;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+</style>
+<body>
+    <div class="container">
+        <h1>ArYAN ALLDL</h1>
+        <p>enter your video link</p>
+        <form id="downloadForm">
+            <input type="text" id="videoUrl" placeholder="Enter video URL" required>
+            <button type="submit">YOU VIDEO</button>
+        </form>
+        <div id="result" class="hidden">
+            <video id="videoPlayer" controls class="video-player hidden"></video>
+            <a id="downloadButton" href='#' download class="download-button hidden">Download Video</a>
+        </div>
+    </div>
+    <script>
+    	document.getElementById('downloadForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const videoUrl = document.getElementById('videoUrl').value;
+    const apiUrl = `https://www.noobs-api.000.pe/dipto/alldl?url=${encodeURIComponent(videoUrl)}`;
+
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const downloadButton = document.getElementById('downloadButton');
+            const videoLink = data.result;
+
+            videoPlayer.src = videoLink;
+            videoPlayer.classList.remove('hidden');
+
+            downloadButton.onclick = function(event) {
+                event.preventDefault(); 
+                fetch(videoLink)
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = 'video.mp4';
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching the video file:', error);
+                        alert('Failed to download video. Please try again.');
+                    });
+            };
+
+            document.getElementById('result').classList.remove('hidden');
+            downloadButton.classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to retrieve video link. Please try again.');
+        });
+});
+
+</script>
+    <script src="download.js"></script>
+</body>
+</html>
